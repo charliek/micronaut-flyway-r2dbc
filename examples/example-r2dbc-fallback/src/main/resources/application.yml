@@ -1,0 +1,16 @@
+micronaut:
+  application:
+    name: example-r2dbc-fallback
+
+# R2DBC configuration - this is all you need!
+r2dbc:
+  datasources:
+    default:
+      url: "r2dbc:postgresql://localhost:5432/example_db"
+      username: "postgres"
+      password: "password"
+
+# Enable Flyway migrations using R2DBC fallback
+flyway-r2dbc:
+  enabled: true
+  baseline-on-migrate: true
