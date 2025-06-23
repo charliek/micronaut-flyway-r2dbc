@@ -1,0 +1,15 @@
+[project]
+name = "micronaut-mcp-docs"
+version = "0.1.0"
+description = "The project to build and run the docs"
+readme = "index.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cairosvg>=2.8.2",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.14",
+    "mkdocstrings>=0.29.1",
+    "mkdocstrings-python>=1.16.11",
+    "pillow>=11.2.1",
+    "pymdown-extensions>=10.15",
+]

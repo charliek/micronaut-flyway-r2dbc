@@ -39,6 +39,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./gradlew publish -Psnapshot=true
 ```
 
+### Documentation
+```bash
+# Serve documentation locally (with hot reload)
+cd site-docs
+uv run mkdocs serve
+
+# Build documentation static files
+cd site-docs
+uv run mkdocs build
+
+# The built documentation will be in site-docs/build/
+```
+
 ## Architecture Overview
 
 ### Core Purpose

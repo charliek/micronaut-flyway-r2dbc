@@ -1,6 +1,10 @@
 # Micronaut Flyway R2DBC
 
+> ⚠️ **Early Development Notice**: This project is in early development and is not yet recommended for production use. APIs and functionality may change significantly between releases.
+
 A Micronaut library that provides Flyway database migrations for R2DBC applications without the complexity and memory overhead of dual datasource configuration.
+
+📚 **[View Documentation](https://charliek.github.io/micronaut-flyway-r2dbc/)**
 
 ## Problem Statement
 
@@ -189,6 +193,28 @@ flyway-r2dbc:
 - ✅ **Transaction Manager Compatibility**: No conflicts with R2DBC transaction management
 - ✅ **Test-Friendly**: Works seamlessly with `@MicronautTest`
 - ✅ **Production-Ready**: Retry logic and comprehensive error handling
+
+## Documentation
+
+Full documentation is available at [https://charliek.github.io/micronaut-flyway-r2dbc/](https://charliek.github.io/micronaut-flyway-r2dbc/)
+
+### Building Documentation Locally
+
+The documentation uses MkDocs with the Material theme. To build and serve locally:
+
+```bash
+cd site-docs
+uv run mkdocs serve
+```
+
+The documentation will be available at http://localhost:8000
+
+To build static files:
+
+```bash
+cd site-docs
+uv run mkdocs build
+```
 
 ## License
 

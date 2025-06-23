@@ -1,0 +1,100 @@
+site_name: Micronaut Flyway R2DBC
+site_description: 'Flyway database migrations for Micronaut R2DBC applications without dual datasource complexity'
+site_author: 'Micronaut Flyway R2DBC Contributors'
+site_url: 'https://charliek.github.io/micronaut-flyway-r2dbc/'
+
+# Source directory
+docs_dir: 'docs'
+
+# Build directory
+site_dir: 'build'
+
+# Repository
+repo_name: 'micronaut-flyway-r2dbc'
+repo_url: 'https://github.com/charliek/micronaut-flyway-r2dbc'
+edit_uri: 'edit/main/site-docs/docs/'
+
+# Configuration
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+    - search.share
+    - header.autohide
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - navigation.footer
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    logo: material/library
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings
+
+# Extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ../
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+# Page tree
+nav:
+  - Home: index.md
+  - Installation: getting-started/installation.md
+  - Quick Start: getting-started/quick-start.md
+  - Configuration: getting-started/configuration.md
+  - How It Works: core-concepts/how-it-works.md
+  - Release Process: development/release-process.md
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/charliek/micronaut-flyway-r2dbc
+  version:
+    provider: mike
+ 
