@@ -1,0 +1,125 @@
+name: Main Branch Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: main-branch-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.caching=true
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up GraalVM CE 21
+      uses: graalvm/setup-graalvm@v1
+      with:
+        java-version: '21'
+        distribution: 'graalvm-community'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Build with Gradle (includes running tests)
+      run: ./gradlew build --build-cache --scan
+    
+    - name: Test Report Summary
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Test Results
+        path: "**/build/test-results/**/*.xml"
+        reporter: java-junit
+        fail-on-error: false
+
+  # Snapshot publishing - commented out for now
+  # To enable snapshot publishing:
+  # 1. Uncomment the publish-snapshot job below
+  # 2. Change the build-docs job to depend on 'publish-snapshot' instead of 'test'
+  #
+  # publish-snapshot:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   if: success()
+  #   
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   
+  #   - name: Set up GraalVM CE 21
+  #     uses: graalvm/setup-graalvm@v1
+  #     with:
+  #       java-version: '21'
+  #       distribution: 'graalvm-community'
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #   
+  #   - name: Setup Gradle
+  #     uses: gradle/actions/setup-gradle@v3
+  #   
+  #   - name: Grant execute permission for gradlew
+  #     run: chmod +x gradlew
+  #   
+  #   - name: Publish snapshot
+  #     run: ./gradlew publish -Psnapshot=true
+  #     env:
+  #       USERNAME: ${{ github.actor }}
+  #       TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-docs:
+    needs: test  # Change to 'publish-snapshot' when snapshot publishing is enabled
+    runs-on: ubuntu-latest
+    if: success()
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+
+    - name: Build documentation
+      run: |
+        cd site-docs
+        uv sync
+        uv run mkdocs build
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./site-docs/build
+
+  deploy-docs:
+    needs: build-docs
+    runs-on: ubuntu-latest
+    if: success()
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
