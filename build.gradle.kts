@@ -56,6 +56,7 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:5.11.0")
 
     // Test runtime dependencies
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
     testRuntimeOnly("org.postgresql:postgresql:42.7.3")
     testRuntimeOnly("org.postgresql:r2dbc-postgresql:1.0.5.RELEASE")
     testRuntimeOnly("ch.qos.logback:logback-classic:1.5.3")

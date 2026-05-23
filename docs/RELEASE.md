@@ -59,7 +59,6 @@ The tag MUST start with 'v' to trigger the release workflow.
 The GitHub Actions workflow will automatically:
 1. Build and test the project
 2. Publish to GitHub Packages
-3. Create a GitHub release
 
 Monitor the Actions tab to ensure the release completes successfully.
 
