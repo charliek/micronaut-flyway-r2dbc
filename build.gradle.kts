@@ -48,8 +48,8 @@ dependencies {
 
     // Testing
     testImplementation("io.micronaut.test:micronaut-test-junit5:4.5.0")
-    testImplementation("org.testcontainers:postgresql:1.19.7")
-    testImplementation("org.testcontainers:junit-jupiter:1.19.7")
+    testImplementation("org.testcontainers:postgresql:1.21.4")
+    testImplementation("org.testcontainers:junit-jupiter:1.21.4")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testImplementation("org.assertj:assertj-core:3.25.3")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
