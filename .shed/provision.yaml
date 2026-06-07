@@ -1,0 +1,19 @@
+# Shed provisioning for micronaut-flyway-r2dbc (Kotlin / Gradle).
+#
+# Java is installed with SDKMAN to match .sdkmanrc (java=21.0.9-graal). The
+# integration tests use Testcontainers (Postgres 16), so the shed must run the
+# `full` image, which ships the Docker daemon.
+#
+#   shed create mfr2dbc --local-dir ~/projects/micronaut-flyway-r2dbc
+#   shed exec mfr2dbc -- bash -lc 'cd $SHED_WORKSPACE && ./gradlew build'
+hooks:
+  install: .shed/scripts/install.sh
+  startup: .shed/scripts/startup.sh
+  shutdown: .shed/scripts/shutdown.sh
+
+# Session env (e.g. TESTCONTAINERS_RYUK_DISABLED) is written to
+# /etc/environment.d by the install hook so it reaches `shed exec`/`console`
+# sessions too — the provision.yaml `env:` block only reaches hooks.
+
+# JDK download + first Gradle build can be slow under the vfs storage driver.
+timeout: 30m
