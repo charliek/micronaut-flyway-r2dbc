@@ -12,7 +12,6 @@ ensure_mise                 # baked into `full`; guard keeps the script portable
 ensure_uv                   # used by site-docs (uv run mkdocs build)
 wait_for_docker             # Testcontainers needs the daemon
 enable_docker_default_bridge # Testcontainers uses docker's default bridge
-enable_public_image_pulls   # let Testcontainers pull postgres:16-alpine
 ensure_sdkman
 
 # Install the exact JDK from .sdkmanrc (java=<version>). Fall back to a Temurin
