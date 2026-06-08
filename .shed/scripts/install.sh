@@ -11,7 +11,6 @@ log "=== install: micronaut-flyway-r2dbc ==="
 ensure_mise                 # baked into `full`; guard keeps the script portable
 ensure_uv                   # used by site-docs (uv run mkdocs build)
 wait_for_docker             # Testcontainers needs the daemon
-enable_docker_default_bridge # Testcontainers uses docker's default bridge
 ensure_sdkman
 
 # Install the exact JDK from .sdkmanrc (java=<version>). Fall back to a Temurin
