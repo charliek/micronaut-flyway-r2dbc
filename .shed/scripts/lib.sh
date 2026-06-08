@@ -55,11 +55,16 @@ ensure_sdkman() {
 # Neutralize it so public images pull anonymously. Idempotent; backs up the
 # original. (If you need a private registry, configure credHelpers instead.)
 enable_public_image_pulls() {
-  local cfg="$HOME/.docker/config.json"
+  local cfg="$HOME/.docker/config.json" tmp
   if [ -f "$cfg" ] && grep -q '"credsStore"[[:space:]]*:[[:space:]]*"shed"' "$cfg" 2>/dev/null; then
-    log "neutralizing docker credsStore=shed so public images pull anonymously"
+    log "removing docker credsStore=shed so public images pull anonymously"
     cp "$cfg" "$cfg.shed-bak" 2>/dev/null || true
-    echo '{}' > "$cfg"
+    tmp="$(mktemp)"
+    if jq 'del(.credsStore)' "$cfg" >"$tmp" 2>/dev/null; then
+      mv "$tmp" "$cfg"        # keep any auths/credHelpers; drop only credsStore
+    else
+      rm -f "$tmp"; echo '{}' >"$cfg"   # jq unavailable: fall back to empty config
+    fi
   fi
 }
 
