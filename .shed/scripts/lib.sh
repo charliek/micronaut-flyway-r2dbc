@@ -64,36 +64,6 @@ wait_for_docker() {
   docker compose version >/dev/null 2>&1 || log "WARN: 'docker compose' unavailable (needs the 'full' image)"
 }
 
-# The stock `full` image ships dockerd with `bridge: none`, which removes the
-# default docker0 network. docker compose works (it creates its own user-defined
-# network), but Testcontainers launches containers on the DEFAULT bridge — so
-# without docker0 they get no IP / no published ports and the wait strategy
-# times out. Re-enable the default bridge (the guest kernel supports it; a
-# user-defined bridge already gets full networking). Idempotent: only edits the
-# config + restarts docker when the bridge is genuinely missing.
-enable_docker_default_bridge() {
-  if docker network inspect bridge >/dev/null 2>&1; then
-    log "docker default bridge present"
-    return
-  fi
-  log "enabling docker default bridge (Testcontainers needs it) ..."
-  local cfg=/etc/docker/daemon.json tmp
-  if [ -f "$cfg" ]; then
-    tmp="$(mktemp)"
-    if jq 'del(.bridge) | del(.iptables)' "$cfg" >"$tmp" 2>/dev/null; then
-      sudo cp "$cfg" "$cfg.shed-bak" 2>/dev/null || true
-      sudo install -m 0644 "$tmp" "$cfg"
-    fi
-    rm -f "$tmp"
-  fi
-  sudo systemctl restart docker
-  local i
-  for i in $(seq 1 30); do
-    docker info >/dev/null 2>&1 && break
-    sleep 1
-  done
-}
-
 # Persist static KEY=VALUE env into every exec/console session (and hook) via
 # the shed agent's /etc/environment.d injection, which it reads per-exec.
 # Usage: persist_session_env <name> KEY=VALUE [KEY=VALUE ...]
