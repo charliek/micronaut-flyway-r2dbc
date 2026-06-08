@@ -5,7 +5,10 @@
 # `full` image, which ships the Docker daemon.
 #
 #   shed create mfr2dbc --local-dir ~/projects/micronaut-flyway-r2dbc
-#   shed exec mfr2dbc -- bash -lc 'cd $SHED_WORKSPACE && ./gradlew build'
+#   shed exec mfr2dbc -- bash -lc 'cd ~/micronaut-flyway-r2dbc && ./gradlew build'
+#
+# (--local-dir lands in ~/<basename>; $SHED_WORKSPACE is set only in hooks,
+# not in `shed exec` sessions, so exec commands cd to the project by name.)
 hooks:
   install: .shed/scripts/install.sh
   startup: .shed/scripts/startup.sh
