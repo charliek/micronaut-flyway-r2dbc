@@ -48,26 +48,6 @@ ensure_sdkman() {
   set -u
 }
 
-# The `full`/`extensions` image ships docker with credsStore=shed, which
-# brokers registry auth to the host. For public registries that the host does
-# not allow-list, the helper returns an error instead of "no credentials",
-# which aborts anonymous Docker Hub pulls (Testcontainers, docker compose).
-# Neutralize it so public images pull anonymously. Idempotent; backs up the
-# original. (If you need a private registry, configure credHelpers instead.)
-enable_public_image_pulls() {
-  local cfg="$HOME/.docker/config.json" tmp
-  if [ -f "$cfg" ] && grep -q '"credsStore"[[:space:]]*:[[:space:]]*"shed"' "$cfg" 2>/dev/null; then
-    log "removing docker credsStore=shed so public images pull anonymously"
-    cp "$cfg" "$cfg.shed-bak" 2>/dev/null || true
-    tmp="$(mktemp)"
-    if jq 'del(.credsStore)' "$cfg" >"$tmp" 2>/dev/null; then
-      mv "$tmp" "$cfg"        # keep any auths/credHelpers; drop only credsStore
-    else
-      rm -f "$tmp"; echo '{}' >"$cfg"   # jq unavailable: fall back to empty config
-    fi
-  fi
-}
-
 # Wait for the docker daemon (auto-started in `full`) and confirm compose is
 # available. Never hard-fails — docker compose is assumed present.
 wait_for_docker() {
